@@ -5,13 +5,13 @@
 namespace PaymentAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class InitialCreate1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PaymentDetail",
+                name: "PaymentDetails",
                 columns: table => new
                 {
                     PaymentDetailId = table.Column<int>(type: "int", nullable: false)
@@ -31,7 +31,7 @@ namespace PaymentAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PaymentDetail");
+                name: "PaymentDetails");
         }
     }
 }
