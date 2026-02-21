@@ -20,3 +20,8 @@ packages/
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Template / test files (not needed in production)
+WeatherForecast.cs
+PaymentAPI.http
+Controllers/WeatherForecastController.cs
