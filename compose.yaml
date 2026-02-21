@@ -1,7 +1,20 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+version: '3.8'
 
 services:
-  # Service 1: Your .NET Web API
+  # Service 1: Angular Frontend
+  frontend:
+    image: paymentui
+    build:
+      # This points to the folder containing your Angular code, 
+      #always try to give relative path, not all can have this absoulte path in teams
+      context: "C:/Users/sjoshi2/OneDrive - Dover Corporation/Learning/Projects/CRUD/PaymentApp"
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80" # Maps port 80 inside container (nginx) to 4200 on your machine
+    depends_on:
+      - paymentapi
+
+  # Service 2: Your .NET Web API
   paymentapi:
     image: paymentapi
     build:
@@ -11,12 +24,12 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      # Overriding the connection string to talk to the 'sqlserver' container
+      # Internal Docker Network: connects to 'sqlserver'
       - ConnectionStrings__DevConnection=Server=sqlserver;Database=PaymentDetailDB;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;
     depends_on:
       - sqlserver
 
-  # Service 2: The SQL Server Database
+  # Service 3: The SQL Server Database
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
@@ -24,3 +37,10 @@ services:
       - MSSQL_SA_PASSWORD=YourStrong@Passw0rd
     ports:
       - "1433:1433"
+    # Mount the volume for data persistence
+    volumes:
+      - sql_data:/var/opt/mssql
+
+# Define the volume globally
+volumes:
+  sql_data:

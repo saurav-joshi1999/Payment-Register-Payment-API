@@ -26,7 +26,7 @@ namespace PaymentAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentDetail>> GetPaymentDetails(int id)
         {
-            var paymentDetails = await _context.PaymentDetails.FindAsync(id);
+            PaymentDetail? paymentDetails = await _context.PaymentDetails.FindAsync(id);
 
             if (paymentDetails == null)
             {
@@ -64,8 +64,8 @@ namespace PaymentAPI.Controllers
                 }
             }
 
-            //return NoContent();
-            return Ok(await _context.PaymentDetails.ToListAsync());
+            return NoContent();
+           // return Ok(await _context.PaymentDetails.ToListAsync());
         }
 
         // POST: api/PaymentDetail
@@ -73,11 +73,11 @@ namespace PaymentAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<PaymentDetail>> PostPaymentDetails(PaymentDetail paymentDetail)
         {
-            _context.PaymentDetails.Add(paymentDetail);
+            await _context.PaymentDetails.AddAsync(paymentDetail);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetPaymentDetails", new { id = paymentDetail.PaymentDetailId }, paymentDetail);
-            return Ok(await _context.PaymentDetails.ToListAsync());
+            return CreatedAtAction("GetPaymentDetails", new { id = paymentDetail.PaymentDetailId }, paymentDetail);
+           //return Ok(await _context.PaymentDetails.ToListAsync());
         }
 
         // DELETE: api/PaymentDetail/5
@@ -93,8 +93,8 @@ namespace PaymentAPI.Controllers
             _context.PaymentDetails.Remove(paymentDetails);
             await _context.SaveChangesAsync();
 
-            //return NoContent();
-            return Ok(await _context.PaymentDetails.ToListAsync());
+            return NoContent();
+            //return Ok(await _context.PaymentDetails.ToListAsync());
         }
 
         private bool PaymentDetailsExists(int id)
